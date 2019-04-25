@@ -51,3 +51,71 @@ void execute(struct process p[],int n)
  }
 }
 
+void scheduling(struct process p[],int n)
+{
+  for(int i =0;i<n;i++)
+  {
+    for(int j=i+1;j<n;j++)
+    {
+      if(p[i].burst>p[j].burst)
+       {
+         struct process temp = p[i];
+         p[i]=p[j];
+         p[j]=temp;
+       }
+
+    }
+  }
+}
+
+
+int check(struct process pr[],struct process temp,int i);
+
+void sortLong(struct process p[],int n)
+{
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j= i+1;j<=n-1;j++)
+        {
+            if(p[j].response<p[i].response)
+            {
+                struct process temp = p[i];
+                p[i]=p[j];
+                p[j]=temp;
+            }
+        }
+    }
+}
+
+void longest_job(struct process p[],int n)
+{
+    struct process temp;
+    p[0].response = p[0].arrival;
+    p[0].completion = p[0].response + p[0].burst;
+    p[0].turnaround = p[0].completion - p[0].arrival;
+    p[0].waiting = p[0].turnaround - p[0].burst;
+    p[0].f=1;
+    temp =p[0];
+    avg_turnaround = p[0].turnaround;
+    avg_waiting =p[0].waiting;
+    int x;
+    for(int i=1;i<n;i++)
+    {
+        for(int j=1;p[j].arrival<=temp.completion && p[j].f!=1&&j<n;j++)
+        {
+            x=j;
+
+        }
+
+        p[x].response=temp.completion;
+        p[x].completion = p[x].response + p[x].burst;
+        p[x].turnaround = p[x].completion - p[x].arrival;
+        p[x].waiting = p[x].turnaround - p[x].burst;
+        p[x].f=1;
+        temp = p[x];
+        avg_turnaround = avg_turnaround + p[x].turnaround;
+        avg_waiting = avg_waiting + p[x].waiting;
+    }
+}
+   
