@@ -118,4 +118,132 @@ void longest_job(struct process p[],int n)
         avg_waiting = avg_waiting + p[x].waiting;
     }
 }
+
+int main()
+{
+ int n;
+  printf("enter the no of process : ");
+  scanf("%d",&n);
+  struct process *pro = (struct process*)calloc(n, sizeof(struct process));
+ if(pro==NULL)
+{
+ printf("memmory is not allocated");
+ exit(0);
+}
+printf("\n========================================PROCESS=================================================\n");
+   //struct process temp;
+   printf("\n\t\t\t Enter arrival time of process p%d || :",0);
+   scanf("%d",&pro->arrival);
+   if(pro->arrival==0)
+   {
+    printf("         \n\n >>>>|PROCESS ARRIVAL TIME CANNOT BE 0 BECAUSE IT WILL RESULT IN ITS  burst time to be 0|<<<< \n");
+   printf("\n\t\t\t Enter arrival time again : ");
+   scanf("%d",&pro->arrival);
+   if(pro->arrival==0)
+    {
+     printf("\n\t\t\tError: arrival_Time=0\n");
+     exit(0);
+    }
+   }
+  pro->burst=2 * pro->arrival;
+  pro->f=0;
+ for(int i =1;i<=n-1;i++)
+ {
+  struct process temp;
+  printf("\n\t\t\t Enter arrival time of process p%d ||:",i);
+  scanf("%d",&temp.arrival);
+  if(temp.arrival==0)
+  {
+    printf("\n\t\t\t------PROCESS ARRIVAL CANNOT BE ZERO BECAUSE IT WILL RESULT IN  IT'S BURST TIME TO BE ZERO-----");
+    printf("\n\n\t\t\tEnter arrival time again: ");
+    scanf("%d",&temp.arrival);
+    if(temp.arrival==0)
+    {
+      printf("\n\t\t\tERROR:  ARRIVAL_TIME=0\n");
+      exit(0);
+    }
+  }
+  int flag =check(pro,temp,i);
+ if(flag==1)
+   {
+   (pro+i)->arrival=temp.arrival;
+   (pro+i)->burst= 2 * (pro+i)->arrival;
+   }
+ else if(flag==0)
+  {
+    printf("\n\t\t\t -> NO PROCESS  CAN HAVE SAME ARRIVAL TIME<-");
+    printf("\n\t\t\t Enter arrival time again :");
+    scanf("%d",&temp.arrival);
+    int flag1= check(pro,temp,i);
+   if(flag1==1)
+   {
+     if(temp.arrival!=0)
+     {
+     (pro+i)->arrival=temp.arrival;
+     (pro+i)->burst=2 * (pro+i)->arrival;
+      (pro+i)->f=0;
+     }
+     else if(temp.arrival==0)
+     {
+      printf("\n\t\t ARRIVAL TIME CANNOT BE ZERO");
+      printf("\n\t\t  enter arrival time again : ");
+      scanf("%d",&temp.arrival);
+      int flag2= check(pro,temp,i);
+      if(temp.arrival!=0 && flag2==1)
+      {
+       (pro+i)->arrival = temp.arrival;
+       (pro+i)->burst =  2 * (pro+i)->arrival;
+       (pro+i)->f= 0;
+      }
+      if(temp.arrival==0|| flag2==0)
+      {
+       printf("\n\t\t\t ERROR: INVALID INPUT CANNOT PROCEED\n\n");
+       exit(0);
+      }
+     }
+   }
+   if(flag1==0)
+   {
+    printf("\n\t\t\t WRONG INPUT ");
+    exit(0);
+   }
+  }
+ }
+
+ printf("\n\t\t *press 1 to apply shortest Job First Scheduling Algorithm on process \n\t\t\t*Press 2 to apply Longest Job First Algoritm on process\n\t\t:-");
+  int choice ;
+  scanf("%d",&choice);
+  if(choice==1)
+  {
+    scheduling(pro,n);
+    execute(pro,n);
+    display(pro,n);
+  }
+  else if(choice==2)
+  {
+    scheduling(pro,n);
+    longest_job(pro,n);
+    sortLong(pro,n);
+    display(pro,n);
+  }
+  free(pro);
+}
+
+
+int check(struct process pr[],struct process temp,int i)
+{
+   int  flag;
+ for(int j=0;j<i;j++)
+ {
+  if(temp.arrival!=pr[j].arrival)
+  {
+   flag=1;
+   }
+  else
+  { flag= 0;
+    break;
+  }
+ }
+ return flag;
+}
    
