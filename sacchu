@@ -1,1 +1,53 @@
+ include<stdio.h>
+# include<stdlib.h>
+
+struct process
+{
+  int arrival;
+  int burst;
+  int response;
+  int completion;
+  int turnaround;
+  int waiting;
+  int f;
+};
+
+int avg_waiting;
+int avg_turnaround;
+
+
+void display(struct process p[],int n)
+{
+  printf("\n\n===============================================================================\n");
+  printf("\t ARRIVAL TIME \t BURST TIME\t turnaround TIME\t WAITING TIME\tRESPONSE\tCOMPLETION\n");
+  printf("================================================================================\n");
+  for(int i=0;i<n;i++)
+  {
+    printf("\t \t%d \t||\t%d\t||\t%d\t||\t%d\t||\t%d\t||\t%d\t\n",p[i].arrival,p[i].burst,p[i].turnaround,p[i].waiting,p[i].response,p[i].completion);
+  }
+ printf("\n\t\t   AVERAGE turnaround TIME : %d",avg_turnaround/n);
+ printf("\n\t\t   AVERAGE WAITING TIME: %d\n\n",avg_waiting/n);
+}
+
+//****************************************************************************
+
+void execute(struct process p[],int n)
+{
+  p[0].response = p[0].arrival;
+  p[0].completion = p[0].response + p[0].burst;
+  p[0].turnaround = p[0].completion - p[0].arrival;
+  p[0].waiting = p[0].turnaround - p[0].burst;
+  avg_turnaround = p[0].turnaround;
+  avg_waiting =p[0].waiting;
+ for(int i=1;i<=n-1;i++)
+ {
+  p[i].response = p[i-1].completion;
+  p[i].completion = p[i].response + p[i].burst;
+  p[i].turnaround = p[i].completion - p[i].arrival;
+  p[i].waiting = p[i].turnaround -p[i].burst;
+  avg_turnaround = avg_turnaround + p[i].turnaround;
+  avg_waiting = avg_waiting + p[i].waiting;
+
+ }
+}
 
